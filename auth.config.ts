@@ -8,11 +8,19 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
-      if (isOnDashboard) {
+      const isOnInvoices = nextUrl.pathname.startsWith("/invoices");
+      const isOnCustomers = nextUrl.pathname.startsWith("/customers");
+      const isOnLogin = nextUrl.pathname.startsWith("/login");
+      if (isOnDashboard || isOnInvoices || isOnCustomers) {
         if (isLoggedIn) return true;
         return false;
       } else if (isLoggedIn) {
-        return Response.redirect(new URL("/dashboard", nextUrl));
+        if (isOnDashboard || isOnLogin)
+          return Response.redirect(new URL("/dashboard", nextUrl));
+        else if (isOnCustomers)
+          return Response.redirect(new URL("/customers", nextUrl));
+        else if (isOnInvoices)
+          return Response.redirect(new URL("/invoices", nextUrl));
       }
       return true;
     },

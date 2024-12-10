@@ -1,11 +1,15 @@
 "use client";
 
 import { lusitana } from "@/app/ui/fonts";
-import { EnvelopeIcon, KeyIcon } from "@heroicons/react/24/outline";
+import {
+  AtSymbolIcon,
+  KeyIcon,
+  ExclamationCircleIcon,
+} from "@heroicons/react/24/outline";
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
-import { Button } from "./button";
+import { Button } from "@/app/ui/button";
 import { useActionState } from "react";
-import { authenticate } from "../lib/actions";
+import { authenticate } from "@/app/lib/actions";
 
 export default function LoginForm() {
   const [errorMessage, formAction, isPending] = useActionState(
@@ -36,7 +40,7 @@ export default function LoginForm() {
                 placeholder="Enter your email address"
                 required
               />
-              <EnvelopeIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+              <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
           <div className="mt-4">
@@ -60,11 +64,20 @@ export default function LoginForm() {
             </div>
           </div>
         </div>
-        <Button className="mt-4 w-full">
+        <Button className="mt-4 w-full" aria-disabled={isPending}>
           Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
-        <div className="flex h-8 items-end space-x-1">
-          {/* Add form errors here */}
+        <div
+          className="flex h-8 items-end space-x-1"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {errorMessage && (
+            <>
+              <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
+              <p className="text-sm text-red-500">{errorMessage}</p>
+            </>
+          )}
         </div>
       </div>
     </form>
